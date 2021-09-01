@@ -11,7 +11,7 @@ export class AppService {
     const { client } = this._wsService;
     client.on('message', async msg => {
       const { from, to, body } = msg;
-      console.log(body);
+      console.log(from,body);
       // client.sendMessage(from,"");
       if (body == "Quieromeme") {
         client.sendMessage(from, this._apiMeme.findById(1).name);
