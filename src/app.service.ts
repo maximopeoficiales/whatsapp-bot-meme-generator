@@ -47,18 +47,22 @@ export class AppService {
 
     }
     if (body.includes("!generateMeme")) {
-      console.log("Evaluando parametros...");
+      // console.log("Evaluando parametros...");
       let params = body.replace("!generateMeme", "").trim().split(",");
-      console.log(params);
-      let idMeme = parseInt(params[0]);
-      let topText = params[1];
-      let bottomText = params[2];
+      // console.log(params);
+      if (params[0] !== "") {
+        let idMeme = parseInt(params[0]);
+        let topText = params[1];
+        let bottomText = params[2];
 
-      let { text, validation, meme } = this._message.getTextAndVerifyMeme(idMeme, topText, bottomText);
+        let { text, validation, meme } = this._message.getTextAndVerifyMeme(idMeme, topText, bottomText);
 
-      await this.client.sendMessage(from, text);
-      if (validation) {
-        await this._wsService.sendMediaUrl(from, meme.url);
+        await this.client.sendMessage(from, text);
+        if (validation && meme) {
+          await this._wsService.sendMediaUrl(from, meme.url);
+        } else {
+          await this.client.sendMessage(from, `Error en la generacion de meme, intentelo de con otro 😒😒`);
+        }
       }
     }
 

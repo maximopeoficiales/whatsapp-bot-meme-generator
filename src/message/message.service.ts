@@ -37,11 +37,13 @@ export class MessageService {
     getTextAndVerifyMeme(idMeme: number, topText: string, bottomText: string) {
         let text = "😭 Ocurrio un Error intentalo denuevo 😭";
         let validation = false;
+        // console.log(idMeme);
+
         let meme = this._apiMeme.findById(idMeme);
-        let urlPlantilla = meme.url;
         console.log(meme);
 
         if (meme) {
+            let urlPlantilla = meme.url;
             meme.url = this._apiMeme.generateLinkWithTopAndBottomText(meme.name, topText, bottomText);
             text = this.setTextWithBr([
                 `Haz elegido: ${meme.name ?? ""}`,
