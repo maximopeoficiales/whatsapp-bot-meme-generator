@@ -32,13 +32,14 @@ export class MessageService {
         let text = "😭 Ocurrio un Error intentalo denuevo 😭";
         let validation = false;
         let meme = this._apiMeme.findById(idMeme);
+        let urlPlantilla = meme.url;
         console.log(meme);
-        
+
         if (meme) {
             meme.url = this._apiMeme.generateLinkWithTopAndBottomText(meme.name, topText, bottomText);
             text = this.setTextWithBr([
                 `Haz elegido: ${meme.name}`,
-                `Plantilla: ${meme.url}`,
+                `Plantilla: ${urlPlantilla}`,
                 `Con texto Superior: ${topText}`,
                 `Y texto Inferior: ${bottomText}`,
                 `Generando meme..... 😽😽😽😽`,
