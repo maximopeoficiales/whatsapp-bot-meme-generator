@@ -44,10 +44,10 @@ export class MessageService {
         if (meme) {
             meme.url = this._apiMeme.generateLinkWithTopAndBottomText(meme.name, topText, bottomText);
             text = this.setTextWithBr([
-                `Haz elegido: ${meme.name}`,
+                `Haz elegido: ${meme.name ?? ""}`,
                 `Plantilla: ${urlPlantilla}`,
-                `Con texto Superior: ${topText}`,
-                `Y texto Inferior: ${bottomText}`,
+                `Con texto Superior: ${topText ?? ""}`,
+                `Y texto Inferior: ${bottomText ?? ""}`,
                 `Generando meme..... 😽😽😽😽`,
             ]);
             validation = true;

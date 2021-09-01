@@ -28,7 +28,7 @@ export class ApiMemeService {
         return dataMeme.length;
     }
     generateLinkWithTopAndBottomText(name: string, topText: string, bottomText: string): string {
-        return `https://apimeme.com/meme?meme=${name}&top=${topText}&bottom=${bottomText}`;
+        return `https://apimeme.com/meme?meme=${name ?? ""}&top=${topText ?? ""}&bottom=${bottomText ?? ""}`;
     }
 
 

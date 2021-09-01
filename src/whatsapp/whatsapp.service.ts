@@ -90,14 +90,20 @@ export class WhatsappService {
 
     async sendMediaPath(number: string, fileName: string): Promise<void> {
         number = number.replace('@c.us', '');
+        // number = number.replace('@c.us', '');
         number = `${number}@c.us`
         const media = MessageMedia.fromFilePath(`./../mediaSend/${fileName}`);
+        if (number.includes("@g.us")) {
+            number = number.replace('@c.us', '');
+        }
         await this.client.sendMessage(number, media);
     }
     async sendMediaUrl(number: string, url: string): Promise<void> {
         number = number.replace('@c.us', '');
         number = `${number}@c.us`;
-
+        if (number.includes("@g.us")) {
+            number = number.replace('@c.us', '');
+        }
         const media = await MessageMedia.fromUrl(url, {
             unsafeMime: true, reqOptions: {},
         });
