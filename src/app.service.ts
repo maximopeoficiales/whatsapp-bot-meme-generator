@@ -105,9 +105,9 @@ export class AppService {
         if (search.length >= 3) {
           await this.client.sendMessage(from, `💬 Estas buscando ${search}💬`);
           await this.sendMemesImages(from, this._apiMeme.findByQuery(search));
+        } else {
+          await this.client.sendMessage(from, `No se permiten busquedas con menos de 3 digitos, intentelo de nuevo 😒😒`);
         }
-      } else {
-        await this.client.sendMessage(from, `No se permiten busquedas con menos de 3 digitos, intentelo de nuevo 😒😒`);
       }
     }
   }
@@ -120,7 +120,7 @@ export class AppService {
 
       });
     } else {
-      await this.client.sendMessage(from, `No puede hay memes disponibles, intentelo de nuevo 😒😒`);
+      await this.client.sendMessage(from, `No hay memes disponibles, intentelo de nuevo 😒😒`);
     }
   }
 
