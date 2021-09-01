@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import { AppService } from './app.service';
 import { WhatsappService } from './whatsapp/whatsapp.service';
 import { ApimemeModule } from './apimeme/apimeme.module';
+import { ApiMemeService } from './apimeme/apimeme.service';
+import { MessageService } from './message/message.service';
 
 @Module({
-  imports: [ApimemeModule],
+  imports: [],
   controllers: [],
-  providers: [AppService, WhatsappService],
+  providers: [AppService, WhatsappService, ApiMemeService, MessageService],
 })
 export class AppModule {
 

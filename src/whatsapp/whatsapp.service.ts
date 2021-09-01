@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as ora from 'ora';
 import * as chalk from 'chalk'
-import { Client } from 'whatsapp-web.js';
+import { Client, MessageMedia } from 'whatsapp-web.js';
 import * as fs from 'fs'
 import * as qrcode from 'qrcode-terminal'
 import { Injectable } from '@nestjs/common';
@@ -12,7 +12,9 @@ export class WhatsappService {
     SESSION_FILE_PATH: string;
     sessionData: any
     constructor() {
-        this.SESSION_FILE_PATH = path.join(__dirname, '..', '..', 'session.json');
+        this.SESSION_FILE_PATH = path.join(__dirname, '..', '..', '..', 'session.json');
+        console.log(this.SESSION_FILE_PATH);
+
         (fs.existsSync(this.SESSION_FILE_PATH)) ? this.withSession() : this.withOutSession();
     }
     /**
@@ -85,4 +87,21 @@ export class WhatsappService {
     //         this.client.sendMessage(from, body);
     //     });
     // }
+
+    async sendMediaPath(number: string, fileName: string): Promise<void> {
+        number = number.replace('@c.us', '');
+        number = `${number}@c.us`
+        const media = MessageMedia.fromFilePath(`./../mediaSend/${fileName}`);
+        await this.client.sendMessage(number, media);
+    }
+    async sendMediaUrl(number: string, url: string): Promise<void> {
+        number = number.replace('@c.us', '');
+        number = `${number}@c.us`;
+        console.log(url);
+
+        const media = await MessageMedia.fromUrl(url, {
+            unsafeMime: true, reqOptions: {},
+        });
+        this.client.sendMessage(number, media);
+    }
 }
