@@ -1,8 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { Meme } from 'src/types/meme';
 import * as dataMeme from '../../data/memes.json';
+import { config } from "../config";
 @Injectable()
 export class ApiMemeService {
+
+    getPage(page: number = 1): Meme[] {
+        // 2 * 5
+        const { maxPage } = config;
+        let maxMeme = maxPage * page;
+        return dataMeme.slice(maxMeme - maxPage, maxMeme);
+    }
 
     findById(id: number): Meme {
         return dataMeme.find(e => e.id === id);

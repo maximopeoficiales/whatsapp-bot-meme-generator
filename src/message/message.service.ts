@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ApiMemeService } from 'src/apimeme/apimeme.service';
-import { WhatsappService } from 'src/whatsapp/whatsapp.service';
-import { Client } from 'whatsapp-web.js';
-
+// import { WhatsappService } from 'src/whatsapp/whatsapp.service';
+// import { Client } from 'whatsapp-web.js';
+import {config} from '../config';
 @Injectable()
 export class MessageService {
     constructor(
@@ -17,7 +17,7 @@ export class MessageService {
             '👋 Hola, Soy Memito',
             'Soy un bot generador de memes',
             `Tengo estas opciones por momento - Contamos actualmente con: ${this._apiMeme.findAll().length} memes`,
-            '✅ Listar primeras 10 memes ⮕ !listMeme',
+            `✅ Listar ${config.maxPage} memes ⮕ !listMemes`,
             '✅ Generar meme ⮕ !generateMeme',
             '✅ ....',
             '------',
@@ -27,7 +27,12 @@ export class MessageService {
         ].join("\n");
     }
 
+    // getTextListMemes(page: number = 1): string {
+    //     let memesFiltered = this._apiMeme.getPage(page);
+    //     console.log(memesFiltered);
 
+    //     return "";
+    // }
     getTextAndVerifyMeme(idMeme: number, topText: string, bottomText: string) {
         let text = "😭 Ocurrio un Error intentalo denuevo 😭";
         let validation = false;

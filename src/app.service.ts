@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import WAWebJS, { Client, MessageMedia } from 'whatsapp-web.js';
+import { Client, Message } from 'whatsapp-web.js';
 import { ApiMemeService } from './apimeme/apimeme.service';
 import { MessageService } from './message/message.service';
+import { Meme } from './types/meme';
 import { WhatsappService } from './whatsapp/whatsapp.service';
 
 @Injectable()
@@ -9,28 +10,29 @@ export class AppService {
   client: Client;
   constructor(
     private readonly _wsService: WhatsappService,
-    // private readonly _apiMeme: ApiMemeService,
-    private readonly _message: MessageService
+    private readonly _message: MessageService,
+    private readonly _apiMeme: ApiMemeService,
   ) {
     const { client } = this._wsService;
     this.client = client;
     this.messageInitilizer();
   }
-  messageInitilizer(): void {
+  async messageInitilizer() {
     this.client.on('message', async msg => {
       const { from, to, body } = msg;
       console.log(from, body);
-      if (body == "!Mostrar opciones" || body == "!Memito") {
+      if (body == "!MostrarOpciones" || body == "!Memito") {
         let opciones = this._message.getOptions();
-        this.client.sendMessage(from, opciones);
+        await this.client.sendMessage(from, opciones);
       }
 
-      this.generateMeme(msg);
+      await this.generateMeme(msg);
+      await this.listMemes(msg);
     });
 
   }
 
-  generateMeme(msg: WAWebJS.Message): void {
+  async generateMeme(msg: Message) {
     const { from, body } = msg;
 
     if (body === "!generateMeme") {
@@ -39,7 +41,7 @@ export class AppService {
         "Ejemplo si desea generar un meme con el id: 1 topText: Hola bottomText: Bro ",
         "🔵 Escriba ⮕ !generateMeme 1,Hola,bro",
       ]);
-      this.client.sendMessage(from, text)
+      await this.client.sendMessage(from, text)
 
 
     }
@@ -53,14 +55,48 @@ export class AppService {
 
       let { text, validation, meme } = this._message.getTextAndVerifyMeme(idMeme, topText, bottomText);
 
-      this.client.sendMessage(from, text);
+      await this.client.sendMessage(from, text);
       if (validation) {
-        this._wsService.sendMediaUrl(from, meme.url);
+        await this._wsService.sendMediaUrl(from, meme.url);
       }
     }
 
 
   }
 
+  async listMemes(msg: Message) {
+    const { from, body } = msg;
+
+    if (body === "!listMemes") {
+      await this.client.sendMessage(from, "💬 Lista de memes Pagina: 1 💬");
+      await this.sendMemesImages(from, this._apiMeme.getPage());
+      await this.client.sendMessage(from, this._message.setTextWithBr([
+        "🔵 Para ver la siguiente pagina",
+        "👉 Escriba ⮕ !listMemes 2",
+        "Y asi sucesivamente"]));
+
+    }
+
+    if (body.includes("!listMemes")) {
+      let page = body.replace("!listMemes", "").trim();
+      if (Number.isInteger(parseInt(page))) {
+        await this.sendMemesImages(from, this._apiMeme.getPage(parseInt(page)));
+      } else {
+        if (page !== "") {
+          await this.client.sendMessage(from, "La pagina debe ser un numero, intentelo de nuevo 😒😒");
+        }
+      }
+
+    }
+  }
+  async sendMemesImages(from: string, memes: Meme[]) {
+    if (memes.length > 0) {
+      memes.forEach(async (meme) => {
+        await this.client.sendMessage(from, `Meme ${meme.id} - ${meme.name}`);
+        await this._wsService.sendMediaUrl(from, meme.url);
+
+      });
+    }
+  }
 
 }

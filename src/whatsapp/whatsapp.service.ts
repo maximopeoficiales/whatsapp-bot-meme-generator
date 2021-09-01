@@ -97,11 +97,10 @@ export class WhatsappService {
     async sendMediaUrl(number: string, url: string): Promise<void> {
         number = number.replace('@c.us', '');
         number = `${number}@c.us`;
-        console.log(url);
 
         const media = await MessageMedia.fromUrl(url, {
             unsafeMime: true, reqOptions: {},
         });
-        this.client.sendMessage(number, media);
+        await this.client.sendMessage(number, media);
     }
 }
