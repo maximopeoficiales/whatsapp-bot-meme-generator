@@ -47,7 +47,7 @@ export class MessageService {
             meme.url = this._apiMeme.generateLinkWithTopAndBottomText(meme.name, topText, bottomText);
             text = this.setTextWithBr([
                 `Haz elegido: ${meme.name ?? ""}`,
-                `Plantilla: ${urlPlantilla}`,
+                // `Plantilla: ${urlPlantilla}`,
                 `Con texto Superior: ${topText ?? ""}`,
                 `Y texto Inferior: ${bottomText ?? ""}`,
                 `Generando meme..... 😽😽😽😽`,
