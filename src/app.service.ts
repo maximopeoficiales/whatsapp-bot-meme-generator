@@ -28,6 +28,7 @@ export class AppService {
 
       await this.generateMeme(msg);
       await this.listMemes(msg);
+      await this.searchMemes(msg);
     });
 
   }
@@ -89,6 +90,28 @@ export class AppService {
 
     }
   }
+  async searchMemes(msg: Message) {
+    const { from, body } = msg;
+
+    if (body === "!searchMemes") {
+      await this.client.sendMessage(from, this._message.setTextWithBr([
+        "👉 Escriba ⮕ !listMemes :busqueda",
+        "👽 Ejemplo: ⮕ !listMemes spiderman"]));
+    }
+
+    if (body.includes("!searchMemes")) {
+      let search = body.replace("!searchMemes", "").trim();
+      if (search !== "") {
+        if (search.length >= 3) {
+          await this.client.sendMessage(from, `💬 Estas buscando ${search}💬`);
+          await this.sendMemesImages(from, this._apiMeme.findByQuery(search));
+        }
+      } else {
+        await this.client.sendMessage(from, `No se permiten busquedas con menos de 3 digitos, intentelo de nuevo 😒😒`);
+      }
+    }
+  }
+
   async sendMemesImages(from: string, memes: Meme[]) {
     if (memes.length > 0) {
       memes.forEach(async (meme) => {
@@ -96,6 +119,8 @@ export class AppService {
         await this._wsService.sendMediaUrl(from, meme.url);
 
       });
+    } else {
+      await this.client.sendMessage(from, `No puede hay memes disponibles, intentelo de nuevo 😒😒`);
     }
   }
 

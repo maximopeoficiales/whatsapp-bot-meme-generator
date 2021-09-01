@@ -17,7 +17,7 @@ export class ApiMemeService {
     }
 
     findByQuery(search: string): Meme[] {
-        return dataMeme.filter(e => e.name.includes(search));
+        return dataMeme.filter(e => e.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
     }
 
     findAll(): Meme[] {

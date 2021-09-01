@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ApiMemeService } from 'src/apimeme/apimeme.service';
 // import { WhatsappService } from 'src/whatsapp/whatsapp.service';
 // import { Client } from 'whatsapp-web.js';
-import {config} from '../config';
+import { config } from '../config';
 @Injectable()
 export class MessageService {
     constructor(
@@ -19,11 +19,12 @@ export class MessageService {
             `Tengo estas opciones por momento - Contamos actualmente con: ${this._apiMeme.findAll().length} memes`,
             `✅ Listar ${config.maxPage} memes ⮕ !listMemes`,
             '✅ Generar meme ⮕ !generateMeme',
+            '✅ Buscar meme ⮕ !searchMemes',
             '✅ ....',
-            '------',
-            '------',
-            'Veo que es la primera vez que nos escribes ¿Quieres que te envie un MEME?',
-            'Responde !Quieromeme'
+            // '------',
+            // '------',
+            // 'Veo que es la primera vez que nos escribes ¿Quieres que te envie un MEME?',
+            // 'Responde !Quieromeme'
         ].join("\n");
     }
 
