@@ -17,7 +17,7 @@ export class ApiMemeService {
     }
 
     findByQuery(search: string): Meme[] {
-        return dataMeme.filter(e => e.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
+        return dataMeme.filter(e => e.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()) || e.id === parseInt(search));
     }
 
     findAll(): Meme[] {
@@ -28,6 +28,9 @@ export class ApiMemeService {
         return dataMeme.length;
     }
     generateLinkWithTopAndBottomText(name: string, topText: string, bottomText: string): string {
+        // name = encodeURI(name);
+        topText = encodeURI(topText ?? "");
+        bottomText = encodeURI(bottomText ?? "");
         return `https://apimeme.com/meme?meme=${name ?? ""}&top=${topText ?? ""}&bottom=${bottomText ?? ""}`;
     }
 
